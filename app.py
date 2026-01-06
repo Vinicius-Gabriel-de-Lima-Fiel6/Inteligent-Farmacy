@@ -271,7 +271,15 @@ with tabs[2]:
             fig.add_trace(go.Scatter(x=x_smooth, y=y_smooth, name=comp_nome, line=dict(color='#10b981', width=4)))
             fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name="Pontos Reais", marker=dict(size=10, color='white', line=dict(width=2))))
         
-            fig.update_layout(template="dark", xaxis_title="Temperatura (°C)", yaxis_title="g/100g H2O")
+           # Substitua a linha 274 por esta:
+            fig.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)', # Fundo transparente para combinar com o Streamlit
+                plot_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='white'),
+                xaxis=dict(title="Temperatura (°C)", gridcolor='gray'),
+                yaxis=dict(title="g/100g H2O", gridcolor='gray'),
+                margin=dict(l=20, r=20, t=40, b=20)
+                                )
         
         # Agora sim, enviando explicitamente para a coluna 2
             c2.plotly_chart(fig, use_container_width=True)

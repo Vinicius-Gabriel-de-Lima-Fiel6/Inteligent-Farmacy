@@ -251,41 +251,70 @@ with tabs[2]:
 
 # --- ABA 4: GRÁFICOS (PLOTLY) ---
     with tabs[3]:
-        st.subheader("Curvas de Solubilidade Interativas")
-        c1, c2 = st.columns([1, 2])
+    st.subheader("Comparação de Curvas de Solubilidade")
     
-        with c1:
-            comp_nome = st.text_input("Nome do Sal", "KNO3")
-            temp_vals = st.text_input("Temps (°C)", "0, 20, 40, 60, 80")
-            sol_vals = st.text_input("Solubilidade (g/100g)", "13, 32, 64, 110, 169")
+    if 'sais' not in st.session_state:
+        st.session_state.sais = [
+            {"nome": "KNO3", "temp": "0, 20, 40, 60, 80", "sol": "13, 32, 64, 110, 169", "cor": "#10b981"},
+            {"nome": "NaCl", "temp": "0, 20, 40, 60, 80", "sol": "35, 36, 37, 38, 39", "cor": "#3b82f6"}
+        ]
 
-    # SAIA da indentação do "with c1" para processar e mostrar no c2
+    c1, c2 = st.columns([1, 2])
+
+    with c1:
+        st.markdown("### 🛠️ Configurar Sais")
+        df_sais = st.data_editor(st.session_state.sais, num_rows="dynamic", key="editor_sais")
+        
+        # Botão para baixar os dados em CSV
+        import pandas as pd
+        csv = pd.DataFrame(df_sais).to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="📥 Baixar Dados (CSV)",
+            data=csv,
+            file_name='curvas_solubilidade.csv',
+            mime='text/csv',
+        )
+
+    with c2:
         try:
-            x = np.array([float(i) for i in temp_vals.split(",")])
-            y = np.array([float(i) for i in sol_vals.split(",")])
-        
-            x_smooth = np.linspace(x.min(), x.max(), 300)
-            y_smooth = make_interp_spline(x, y, k=2)(x_smooth)
-        
             fig = go.Figure()
-            fig.add_trace(go.Scatter(x=x_smooth, y=y_smooth, name=comp_nome, line=dict(color='#10b981', width=4)))
-            fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name="Pontos Reais", marker=dict(size=10, color='white', line=dict(width=2))))
-        
-           # Substitua a linha 274 por esta:
+            for sal in df_sais:
+                x = np.array([float(i) for i in sal["temp"].split(",")])
+                y = np.array([float(i) for i in sal["sol"].split(",")])
+                x_smooth = np.linspace(x.min(), x.max(), 300)
+                y_smooth = make_interp_spline(x, y, k=2)(x_smooth)
+                
+                fig.add_trace(go.Scatter(
+                    x=x_smooth, y=y_smooth, name=sal["nome"],
+                    line=dict(color=sal["cor"], width=3)
+                ))
+
             fig.update_layout(
-                paper_bgcolor='rgba(0,0,0,0)', # Fundo transparente para combinar com o Streamlit
+                paper_bgcolor='rgba(0,0,0,0)',
                 plot_bgcolor='rgba(0,0,0,0)',
                 font=dict(color='white'),
-                xaxis=dict(title="Temperatura (°C)", gridcolor='gray'),
-                yaxis=dict(title="g/100g H2O", gridcolor='gray'),
-                margin=dict(l=20, r=20, t=40, b=20)
-                                )
-        
-        # Agora sim, enviando explicitamente para a coluna 2
-            c2.plotly_chart(fig, use_container_width=True)
-        
+                xaxis=dict(title="Temperatura (°C)", gridcolor='rgba(255,255,255,0.1)'),
+                yaxis=dict(title="g/100g H2O", gridcolor='rgba(255,255,255,0.1)'),
+                legend=dict(bgcolor='rgba(0,0,0,0)'),
+                hovermode="x unified"
+            )
+
+            # Configuração para permitir o download da imagem pelo menu do gráfico
+            config = {
+                'toImageButtonOptions': {
+                    'format': 'png', # ou 'jpeg', 'svg', 'pdf'
+                    'filename': 'grafico_solubilidade',
+                    'height': 500,
+                    'width': 700,
+                    'scale': 1 # Resolução da imagem
+                }
+            }
+
+            st.plotly_chart(fig, use_container_width=True, config=config)
+            st.caption("📸 Use a câmera no canto superior direito do gráfico para baixar como PNG.")
+
         except Exception as e:
-            st.info("Insira valores numéricos separados por vírgula para gerar o gráfico.")
+            st.warning("Verifique o formato dos dados (ex: 10, 20, 30)")
 
 # --- ABA 5: ADMIN (UPLOAD SUPABASE) ---
 with tabs[4]:

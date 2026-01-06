@@ -251,13 +251,13 @@ with tabs[2]:
 
 # --- ABA 4: GRÁFICOS (PLOTLY) ---
     with tabs[3]:
-    st.subheader("Curvas de Solubilidade Interativas")
-    c1, c2 = st.columns([1, 2])
+        st.subheader("Curvas de Solubilidade Interativas")
+        c1, c2 = st.columns([1, 2])
     
-    with c1:
-        comp_nome = st.text_input("Nome do Sal", "KNO3")
-        temp_vals = st.text_input("Temps (°C)", "0, 20, 40, 60, 80")
-        sol_vals = st.text_input("Solubilidade (g/100g)", "13, 32, 64, 110, 169")
+        with c1:
+            comp_nome = st.text_input("Nome do Sal", "KNO3")
+            temp_vals = st.text_input("Temps (°C)", "0, 20, 40, 60, 80")
+            sol_vals = st.text_input("Solubilidade (g/100g)", "13, 32, 64, 110, 169")
 
     # SAIA da indentação do "with c1" para processar e mostrar no c2
     try:

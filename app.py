@@ -184,7 +184,7 @@ ELEMENTOS ={
 st.markdown('<div class="main-header"><h1>BioPharm Ultra 2026</h1><p>Sistema Unificado: Banco de Dados, APIs e Cálculos Avançados</p></div>', unsafe_allow_html=True)
 
 # --- 7. NAVEGAÇÃO POR ABAS ---
-tabs = st.tabs(["💬 Chatbot Híbrido", "💎 Tabelas Químicas", "⚖️ Estequiometria & 3D", "📈 Gráficos de Solubilidade"," +/- Calculadora Química ,"⚙️ Admin (Upload)"])
+tabs = st.tabs(["💬 Chatbot Híbrido", "💎 Tabelas Químicas", "⚖️ Estequiometria & 3D", "📈 Gráficos de Solubilidade"," +/- Calculadora Química" ,"⚙️ Admin (Upload)"])
 
 # --- ABA 1: CHATBOT (SUPABASE + PUBCHEM) ---
 with tabs[0]:

@@ -260,7 +260,7 @@ with tabs[2]:
             sol_vals = st.text_input("Solubilidade (g/100g)", "13, 32, 64, 110, 169")
 
     # SAIA da indentação do "with c1" para processar e mostrar no c2
-        #try:
+        try:
             x = np.array([float(i) for i in temp_vals.split(",")])
             y = np.array([float(i) for i in sol_vals.split(",")])
         
@@ -284,8 +284,8 @@ with tabs[2]:
         # Agora sim, enviando explicitamente para a coluna 2
             c2.plotly_chart(fig, use_container_width=True)
         
-        #except Exception as e:
-            #st.info("Insira valores numéricos separados por vírgula para gerar o gráfico.")
+        except Exception as e:
+            st.info("Insira valores numéricos separados por vírgula para gerar o gráfico.")
 
 # --- ABA 5: ADMIN (UPLOAD SUPABASE) ---
 with tabs[4]:

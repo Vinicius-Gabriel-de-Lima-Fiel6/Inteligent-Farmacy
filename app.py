@@ -184,7 +184,7 @@ ELEMENTOS ={
 st.markdown('<div class="main-header"><h1>BioPharm Ultra 2026</h1><p>Sistema Unificado: Banco de Dados, APIs e Cálculos Avançados</p></div>', unsafe_allow_html=True)
 
 # --- 7. NAVEGAÇÃO POR ABAS ---
-tabs = st.tabs(["💬 Chatbot Híbrido", "💎 Tabelas Químicas", "⚖️ Estequiometria & 3D", "📈 Gráficos de Solubilidade", "⚙️ Admin (Upload)"])
+tabs = st.tabs(["💬 Chatbot Híbrido", "💎 Tabelas Químicas", "⚖️ Estequiometria & 3D", "📈 Gráficos de Solubilidade"," +/- Calculadora Química ,"⚙️ Admin (Upload)"])
 
 # --- ABA 1: CHATBOT (SUPABASE + PUBCHEM) ---
 with tabs[0]:
@@ -316,8 +316,64 @@ with tabs[2]:
             except Exception as e:
                 st.warning("Verifique o formato dos dados (ex: 10, 20, 30)")
 
-# --- ABA 5: ADMIN (UPLOAD SUPABASE) ---
+# ---  calc---
 with tabs[4]:
+    st.subheader("💊 Central de Cálculos Farmacêuticos")
+    
+    categoria = st.selectbox("Selecione o tipo de cálculo:", [
+        "Preparo de Soluções (Molaridade/Massa)",
+        "Diluições e Misturas (C1V1)",
+        "Fator de Correção e Equivalência",
+        "Cálculos de Infusão e Gotejamento",
+        "Conversão de Unidades e Dosagem"
+    ])
+    st.divider()
+
+    if categoria == "Preparo de Soluções (Molaridade/Massa)":
+        c1, c2 = st.columns(2)
+        with c1:
+            mm = st.number_input("Massa Molar (g/mol)", value=100.0)
+            vol = st.number_input("Volume Desejado (mL)", value=100.0)
+            conc = st.number_input("Concentração (mol/L)", value=0.1, format="%.4f")
+        with c2:
+            massa = (conc * (vol/1000) * mm)
+            st.metric("Massa Necessária", f"{massa:.4f} g")
+            st.caption("Fórmula: m = C * V * MM")
+
+    elif categoria == "Fator de Correção e Equivalência":
+        st.info("Utilizado para ajustar a massa baseada no teor de umidade ou sal/éster.")
+        c1, c2 = st.columns(2)
+        with c1:
+            teor = st.number_input("Teor/Pureza (%)", value=98.0)
+            umidade = st.number_input("Umidade (%)", value=2.0)
+            massa_prescrita = st.number_input("Massa Prescrita (mg)", value=500.0)
+        with c2:
+            # Cálculo do Fator de Correção (FC)
+            fc = 100 / (teor - umidade) if (teor-umidade) > 0 else 1
+            massa_corrigida = massa_prescrita * fc
+            st.metric("Fator de Correção (FC)", f"{fc:.3f}")
+            st.metric("Massa a Pesar", f"{massa_corrigida:.2f} mg")
+
+    elif categoria == "Cálculos de Infusão e Gotejamento":
+        c1, c2 = st.columns(2)
+        with c1:
+            vol_inf = st.number_input("Volume Total (mL)", value=500.0)
+            tempo_h = st.number_input("Tempo de Infusão (Horas)", value=8.0)
+        with c2:
+            gotas_min = (vol_inf) / (tempo_h * 3)
+            mcgotas_min = gotas_min * 3
+            st.metric("Gotas por Minuto", f"{int(gotas_min)} gts/min")
+            st.metric("Microgotas por Minuto", f"{int(mcgotas_min)} mcgts/min")
+
+    elif categoria == "Conversão de Unidades e Dosagem":
+        sub_tipo = st.radio("Conversão:", ["mg -> UI (Vitamina A)", "UI -> mg (Vitamina E)", "Massa Corpórea (mg/kg)"])
+        
+        if sub_tipo == "Massa Corpórea (mg/kg)":
+            peso = st.number_input("Peso do Paciente (kg)", value=70.0)
+            dose_kg = st.number_input("Dose Prescrita (mg/kg)", value=5.0)
+            st.success(f"Dose Total: {peso * dose_kg:.2f} mg")
+#------------------------------Alimentar inteligencia---------------
+with tabs[5]:
     st.subheader("Alimentar Inteligência Coletiva")
     st.info("O que você cadastrar aqui será salvo na nuvem e o Chatbot aprenderá imediatamente.")
     with st.form("admin_form"):
@@ -330,3 +386,4 @@ with tabs[4]:
                     st.success("✅ Conhecimento integrado com sucesso!")
                 except Exception as e: st.error(f"Erro ao salvar: {e}")
             else: st.warning("Preencha todos os campos.")
+                

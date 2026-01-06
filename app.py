@@ -260,24 +260,24 @@ with tabs[2]:
             sol_vals = st.text_input("Solubilidade (g/100g)", "13, 32, 64, 110, 169")
 
     # SAIA da indentação do "with c1" para processar e mostrar no c2
-    try:
-        x = np.array([float(i) for i in temp_vals.split(",")])
-        y = np.array([float(i) for i in sol_vals.split(",")])
+        try:
+            x = np.array([float(i) for i in temp_vals.split(",")])
+            y = np.array([float(i) for i in sol_vals.split(",")])
         
-        x_smooth = np.linspace(x.min(), x.max(), 300)
-        y_smooth = make_interp_spline(x, y, k=2)(x_smooth)
+            x_smooth = np.linspace(x.min(), x.max(), 300)
+            y_smooth = make_interp_spline(x, y, k=2)(x_smooth)
         
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=x_smooth, y=y_smooth, name=comp_nome, line=dict(color='#10b981', width=4)))
-        fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name="Pontos Reais", marker=dict(size=10, color='white', line=dict(width=2))))
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=x_smooth, y=y_smooth, name=comp_nome, line=dict(color='#10b981', width=4)))
+            fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name="Pontos Reais", marker=dict(size=10, color='white', line=dict(width=2))))
         
-        fig.update_layout(template="dark", xaxis_title="Temperatura (°C)", yaxis_title="g/100g H2O")
+            fig.update_layout(template="dark", xaxis_title="Temperatura (°C)", yaxis_title="g/100g H2O")
         
         # Agora sim, enviando explicitamente para a coluna 2
-        c2.plotly_chart(fig, use_container_width=True)
+            c2.plotly_chart(fig, use_container_width=True)
         
-    except Exception as e:
-        st.info("Insira valores numéricos separados por vírgula para gerar o gráfico.")
+        except Exception as e:
+            st.info("Insira valores numéricos separados por vírgula para gerar o gráfico.")
 
 # --- ABA 5: ADMIN (UPLOAD SUPABASE) ---
 with tabs[4]:

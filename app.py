@@ -51,8 +51,8 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # --- 5. DADOS ESTÁTICOS (TABELA PERIÓDICA) ---
-ELEMENTOS = {
-    "H": {"n": 1, "m": 1.008, "cat": "Não-metal", "cor": "#3b82f6"},
+ELEMENTOS ={
+        "H": {"n": 1, "m": 1.008, "cat": "Não-metal", "cor": "#3b82f6"},
     "He": {"n": 2, "m": 4.002, "cat": "Gás Nobre", "cor": "#8b5cf6"},
     "Li": {"n": 3, "m": 6.94, "cat": "Alcalino", "cor": "#f59e0b"},
     "Be": {"n": 4, "m": 9.012, "cat": "Alcalino-terroso", "cor": "#10b981"},
@@ -178,8 +178,8 @@ ELEMENTOS = {
     "Ubq": {"n": 124, "m": 332.0, "cat": "Superpesado", "cor": "#7c3aed"},
     "Ubp": {"n": 125, "m": 334.0, "cat": "Superpesado", "cor": "#7c3aed"},
     "Ubh": {"n": 126, "m": 336.0, "cat": "Superpesado", "cor": "#7c3aed"},
-    "Ubs": {"n": 127, "m": 338.0, "cat": "Superpesado", "cor": "#7c3aed"},
-
+    "Ubs": {"n": 127, "m": 338.0, "cat": "Superpesado", "cor": "#7c3aed"}
+}
 # --- 6. HEADER PRINCIPAL ---
 st.markdown('<div class="main-header"><h1>BioPharm Ultra 2026</h1><p>Sistema Unificado: Banco de Dados, APIs e Cálculos Avançados</p></div>', unsafe_allow_html=True)
 

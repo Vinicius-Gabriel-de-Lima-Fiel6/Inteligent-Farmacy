@@ -267,13 +267,13 @@ with tabs[2]:
         
         # Botão para baixar os dados em CSV
         import pandas as pd
-            csv = pd.DataFrame(df_sais).to_csv(index=False).encode('utf-8')
-            st.download_button(
+        csv = pd.DataFrame(df_sais).to_csv(index=False).encode('utf-8')
+        st.download_button(
                 label="📥 Baixar Dados (CSV)",
                 data=csv,
                 file_name='curvas_solubilidade.csv',
                 mime='text/csv',
-        )
+            )
 
         with c2:
             try:
